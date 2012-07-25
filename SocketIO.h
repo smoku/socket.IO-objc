@@ -36,7 +36,7 @@ typedef void(^SocketIOCallback)(id argsData);
 - (void) socketIO:(SocketIO *)socket didReceiveJSON:(SocketIOPacket *)packet;
 - (void) socketIO:(SocketIO *)socket didReceiveEvent:(SocketIOPacket *)packet;
 - (void) socketIO:(SocketIO *)socket didSendMessage:(SocketIOPacket *)packet;
-- (void) socketIOHandshakeFailed:(SocketIO *)socket;
+- (void) socketIOHandshakeFailed:(SocketIO *)socket withError:(NSError *)error;
 @end
 
 

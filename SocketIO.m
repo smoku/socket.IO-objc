@@ -58,6 +58,8 @@ static NSString* kSecureXHRURL = @"https://%@:%d/socket.io/1/xhr-polling/%@";
 - (NSString *) addAcknowledge:(SocketIOCallback)function;
 - (void) removeAcknowledgeForKey:(NSString *)key;
 
+- (NSMutableArray*) getMatchesFrom:(NSString*)data with:(NSString*)regex;
+
 @end
 
 
@@ -579,14 +581,21 @@ static NSString* kSecureXHRURL = @"https://%@:%d/socket.io/1/xhr-polling/%@";
     _isConnected = NO;
     _isConnecting = NO;
     
-    if ([_delegate respondsToSelector:@selector(socketIOHandshakeFailed:)]) {
-        [_delegate socketIOHandshakeFailed:self];
+    if ([_delegate respondsToSelector:@selector(socketIOHandshakeFailed:withError:)]) {
+        [_delegate socketIOHandshakeFailed:self withError:error];
     }
 }
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection 
 { 	
  	NSString *responseString = [[NSString alloc] initWithData:_httpRequestData encoding:NSASCIIStringEncoding];
+    
+    if ([responseString isEqualToString:@"handshake error"]) {
+        NSError *error = [NSError errorWithDomain:@"SocketIO" code:0 userInfo:[NSDictionary dictionaryWithObject:@"Handshake error" forKey:NSLocalizedDescriptionKey]];
+        [self connection:connection didFailWithError:error];
+        
+        return;
+    }
 
     [self log:[NSString stringWithFormat:@"requestFinished() %@", responseString]];
     NSArray *data = [responseString componentsSeparatedByString:@":"];
