@@ -481,6 +481,7 @@ static NSString* kSecureXHRURL = @"https://%@:%d/socket.io/1/xhr-polling/%@";
     
     // Disconnect the websocket, just in case
     if (_webSocket != nil) {
+        [_webSocket setDelegate:nil];        
         [_webSocket close];
     }
     
