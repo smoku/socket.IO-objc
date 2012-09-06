@@ -69,7 +69,7 @@ typedef void(^SocketIOCallback)(id argsData);
     NSMutableData * _httpRequestData;
 }
 
-@property (nonatomic, readonly) BOOL isConnected, isConnecting;
+@property (nonatomic) BOOL isConnected, isConnecting;
 @property (nonatomic) BOOL useSecure;
 
 - (id) initWithDelegate:(id<SocketIODelegate>)delegate;
